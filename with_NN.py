@@ -148,6 +148,7 @@ class Hangman_Game():
         self.lives = 6
         self.played_letters = {}
         self.over = False
+        self.winner = False
     
     def game_status(self):
         return self.output
@@ -158,6 +159,7 @@ class Hangman_Game():
             print('Game Over')
         elif(''.join(self.output[::])==self.word):
             print('You won')
+            self.winner = True
             self.over = True
 
     def guess(self,letter):
