@@ -3,6 +3,8 @@ import tensorflow as tf
 from itertools import combinations
 
 ALPHABET = np.array([ s for s in 'abcdefghijklmnopqrstuvwxyz'])
+# determine a fixed order so that we don't repeat words with multiple game instances
+sorting = np.random.choice(range(1000),size=1000,replace=False)
 
 class HangManPlayer():
     def __init__(self,nnodes):
@@ -135,14 +137,16 @@ class Player_populations():
                 self.players[i].modify_layers(dw,db)
                 cnt+=1
         
-
-
         
 class Hangman_Game():
-    def __init__(self):
-        self.dict = open('./play_set.txt').readlines()
-        self.word = np.random.choice(self.dict,size=1)[0][:-1]
-        print(self.word)
+    def __init__(self,word=''):
+        if(word==''):
+            self.dict = open('./play_set.txt').readlines()
+            self.word = np.random.choice(self.dict,size=1)[0][:-1]
+        else:
+            self.dict = [word]
+            self.word = word
+        #print(self.word)
         self.word_array = np.array([s for s in self.word])
         self.output = list(('_'*len(self.word))[:])
         self.lives = 6
@@ -156,9 +160,9 @@ class Hangman_Game():
     def game_over(self):
         if(self.lives <= 0):
             self.over = True
-            print('Game Over')
+            #print('Game Over')
         elif(''.join(self.output[::])==self.word):
-            print('You won')
+            #print('You won')
             self.winner = True
             self.over = True
 
@@ -168,8 +172,8 @@ class Hangman_Game():
             for i in pos: self.output[i]=letter
         else:
             self.lives -= 1 
-        print('|'*self.lives)
-        print(' '.join(self.output))
+        #print('|'*self.lives)
+        #print(' '.join(self.output))
         
         self.game_over()
         
